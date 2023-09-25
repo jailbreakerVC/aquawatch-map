@@ -3,17 +3,19 @@ import { MapContainer, TileLayer, useMap, Marker, Popup } from "react-leaflet";
 import "./App.css";
 import { useEffect, useState } from "react";
 import supabase from "../supabase";
+import Pointer from "./components/Pointer";
 
 function App() {
-  const position = [28.7077245, 77.1389801];
   const [currentLat, setCurrentLat] = useState();
   const [currentLon, setCurrentLon] = useState();
   const [safeToLoad, setSafeToLoad] = useState(false);
+  const [pointers, setPointers] = useState([]);
 
   useEffect(() => {
     async function getpoints() {
       let { data: points, error } = await supabase.from("points").select("*");
       console.log("Data: ", points);
+      setPointers(points);
     }
     function success(position) {
       const latitude = position.coords.latitude;
@@ -53,7 +55,7 @@ function App() {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={position}>
+            {/* <Marker position={position}>
               <Popup>
                 <img
                   src="src/assets/opendrain.jpeg"
@@ -62,7 +64,12 @@ function App() {
                 ></img>
                 <p>Open drain</p>
               </Popup>
-            </Marker>
+            </Marker> */}
+            {pointers.map
+              ? pointers.map((pointer) => {
+                  return <Pointer data={pointer} />;
+                })
+              : null}
           </MapContainer>
         </div>
       </>
