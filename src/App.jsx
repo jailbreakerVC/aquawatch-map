@@ -2,6 +2,7 @@ import React from "react";
 import { MapContainer, TileLayer, useMap, Marker, Popup } from "react-leaflet";
 import "./App.css";
 import { useEffect, useState } from "react";
+import supabase from "../supabase";
 
 function App() {
   const position = [28.7077245, 77.1389801];
@@ -10,16 +11,21 @@ function App() {
   const [safeToLoad, setSafeToLoad] = useState(false);
 
   useEffect(() => {
+    async function getpoints() {
+      let { data: points, error } = await supabase.from("points").select("*");
+      console.log("Data: ", points);
+    }
     function success(position) {
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
       setCurrentLat(latitude);
       setCurrentLon(longitude);
       setSafeToLoad(true);
+      getpoints();
     }
-
     function error() {
       console.log("Unable to retrieve your location");
+      alert("Cannot access location", error);
     }
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(success, error);
