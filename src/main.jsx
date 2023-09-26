@@ -4,7 +4,7 @@ import App from "./App.jsx";
 // import "./index.css";
 // import { MapContainer, TileLayer, useMap, Marker, Popup } from "react-leaflet";
 // import "./App.css";
-import "leaflet/dist/leaflet.css";
+// import "leaflet/dist/leaflet.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
